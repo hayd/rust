@@ -29,6 +29,7 @@ use distributions::{IndependentSample, Sample};
 /// including `high`, but this may be very difficult. All the
 /// primitive integer types satisfy this property, and the float types
 /// normally satisfy it, but rounding may mean `high` can occur.
+#[derive(Hash)]
 pub struct Range<X> {
     low: X,
     range: X,
@@ -161,6 +162,13 @@ mod tests {
     fn test_range_bad_limits_flipped() {
         Range::new(10, 5);
     }
+    #[test]
+    fn test_hash() {
+        use std::hash::{Hash, SipHash};
+        let mut h = SipHasher::new();
+        Range::new(1, 10)
+            .hash(&mut h);
+     }
 
     #[test]
     fn test_integers() {
